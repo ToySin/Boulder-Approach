@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import MapView, { Region } from "react-native-maps";
+import { MyLocationDirection } from 'react-native-maps-my-location-direction';
 import * as Location from "expo-location";
 
 export default function MapScreen() {
     const [location, setLocation] = useState<Location.LocationObject | null>(null);
     const [region, setRegion] = useState<Region | undefined>(undefined);
+    const [heading, setHeading] = useState<number | null>(null);
 
     // Request permission to access location and get the current location
     useEffect(() => {
@@ -26,6 +28,9 @@ export default function MapScreen() {
                 latitudeDelta: 0.005,
                 longitudeDelta: 0.005,
             });
+            Location.watchHeadingAsync((newHeading) => {
+              setHeading(newHeading.trueHeading);
+            });
         })();
     }, []);
 
@@ -41,7 +46,10 @@ export default function MapScreen() {
                 zoomEnabled={true}
                 pitchEnabled={true}
                 rotateEnabled={true}
-            >    
+            >
+              <MyLocationDirection
+                img={require("../../assets/images/favicon.png")}
+              />
             </MapView>
         </View>
     );
