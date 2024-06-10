@@ -23,8 +23,8 @@ export default function MapScreen() {
             setRegion({
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
-                latitudeDelta: location ? 0.1 : 5,
-                longitudeDelta: location ? 0.1 : 5,
+                latitudeDelta: 0.005,
+                longitudeDelta: 0.005,
             });
         })();
     }, []);
