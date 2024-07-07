@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package api;
+
+import "boulder.proto";
+
+option go_package = "../service/api";
+
+service BoulderApproachService {
+  rpc GetApproach(GetApproachRequest) returns (GetApproachResponse);
+  rpc GetBoulder(GetBoulderRequest) returns (GetBoulderResponse);
+  rpc ListBoulders(ListBouldersRequest) returns (ListBouldersResponse);
+}
+
+message GetApproachRequest {
+  string approach_id = 1;
+}
+
+message GetApproachResponse {
+  Approach approach = 1;
+}
+
+message GetBoulderRequest {
+  string boulder_id = 1;
+}
+
+message GetBoulderResponse {
+  Boulder boulder = 1;
+}
+
+message ListBouldersRequest {
+  optional string search_key = 1;
+}
+
+message ListBouldersResponse {
+  repeated Boulder boulders = 1;
+}
