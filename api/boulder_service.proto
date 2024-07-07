@@ -5,6 +5,7 @@ package api;
 import "boulder.proto";
 
 option go_package = "../service/api";
+option swift_prefix = "API";
 
 service BoulderApproachService {
   rpc GetApproach(GetApproachRequest) returns (GetApproachResponse);

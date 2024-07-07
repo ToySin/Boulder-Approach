@@ -20,7 +20,7 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-struct Api_Point {
+struct APIPoint {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -36,7 +36,7 @@ struct Api_Point {
   init() {}
 }
 
-struct Api_Approach {
+struct APIApproach {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -47,14 +47,14 @@ struct Api_Approach {
 
   var description_p: String = String()
 
-  var points: [Api_Point] = []
+  var points: [APIPoint] = []
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
 }
 
-struct Api_Boulder {
+struct APIBoulder {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -63,7 +63,7 @@ struct Api_Boulder {
 
   var name: String = String()
 
-  var approaches: [Api_Approach] = []
+  var approaches: [APIApproach] = []
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -71,16 +71,16 @@ struct Api_Boulder {
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
-extension Api_Point: @unchecked Sendable {}
-extension Api_Approach: @unchecked Sendable {}
-extension Api_Boulder: @unchecked Sendable {}
+extension APIPoint: @unchecked Sendable {}
+extension APIApproach: @unchecked Sendable {}
+extension APIBoulder: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
 fileprivate let _protobuf_package = "api"
 
-extension Api_Point: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+extension APIPoint: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".Point"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "latitude"),
@@ -115,7 +115,7 @@ extension Api_Point: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementation
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Api_Point, rhs: Api_Point) -> Bool {
+  static func ==(lhs: APIPoint, rhs: APIPoint) -> Bool {
     if lhs.latitude != rhs.latitude {return false}
     if lhs.longitude != rhs.longitude {return false}
     if lhs.text != rhs.text {return false}
@@ -124,7 +124,7 @@ extension Api_Point: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementation
   }
 }
 
-extension Api_Approach: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+extension APIApproach: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".Approach"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "approach_id"),
@@ -164,7 +164,7 @@ extension Api_Approach: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Api_Approach, rhs: Api_Approach) -> Bool {
+  static func ==(lhs: APIApproach, rhs: APIApproach) -> Bool {
     if lhs.approachID != rhs.approachID {return false}
     if lhs.name != rhs.name {return false}
     if lhs.description_p != rhs.description_p {return false}
@@ -174,7 +174,7 @@ extension Api_Approach: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
   }
 }
 
-extension Api_Boulder: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+extension APIBoulder: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".Boulder"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "boulder_id"),
@@ -209,7 +209,7 @@ extension Api_Boulder: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Api_Boulder, rhs: Api_Boulder) -> Bool {
+  static func ==(lhs: APIBoulder, rhs: APIBoulder) -> Bool {
     if lhs.boulderID != rhs.boulderID {return false}
     if lhs.name != rhs.name {return false}
     if lhs.approaches != rhs.approaches {return false}
