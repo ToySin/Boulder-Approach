@@ -10,14 +10,18 @@ import (
 	"google.golang.org/grpc"
 
 	pb "github.com/toysin/boulder/service/api"
+	"github.com/toysin/boulder/service/rpc_service"
 )
 
 func main() {
 	// Create a new server
 	s := grpc.NewServer()
 
+	// Create a new service
+	rpcService := rpc_service.New()
+
 	// Register the server with the proto
-	pb.RegisterBoulderApproachServiceServer(s, pb.UnimplementedBoulderApproachServiceServer{})
+	pb.RegisterBoulderApproachServiceServer(s, rpcService)
 
 	// Create a listener
 	lis, err := net.Listen("tcp", ":8080")
