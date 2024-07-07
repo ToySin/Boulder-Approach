@@ -2,8 +2,7 @@ syntax = "proto3";
 
 package api;
 
-option go_package = "service.api";
-option swift_prefix = "API";
+option go_package = "../service/api";
 
 message Point {
   double latitude = 1;

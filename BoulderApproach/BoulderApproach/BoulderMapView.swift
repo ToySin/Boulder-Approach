@@ -7,27 +7,56 @@
 
 import SwiftUI
 import MapKit
-import Observation
 
-struct MapView: View {
-    let locationManager = CLLocationManager()
-    
+struct BoulderMapView: View {
+    @State private var locationManager = CLLocationManager()
     @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
     
+    @State private var route: [CLLocationCoordinate2D] = []
+    
+    @State private var searchText = ""
+    
     var body: some View {
-        Map(position: $position) {
-            UserAnnotation()
-        }
-        .mapControls {
-            MapUserLocationButton()
-        }
-        .onAppear {
-            locationManager
-                .requestWhenInUseAuthorization()
+        
+        ZStack {
+            Map(position: $position) {
+                UserAnnotation()
+                
+                // Draw polyline
+                if !route.isEmpty {
+                    MapPolyline(coordinates: route)
+                        .stroke(.red, lineWidth: 5)
+                }
+                
+                
+                
+                
+            }
+            .mapControls {
+                MapUserLocationButton()
+                MapCompass()
+                
+            }
+            .onAppear {
+                locationManager
+                    .requestWhenInUseAuthorization()
+            }
+            
+            VStack {
+                BoulderSearchBar(text: $searchText, onSearch: {})
+                    .padding()
+                
+                Spacer()
+                
+                HStack {
+                    Spacer()
+                    
+                }
+            }
         }
     }
 }
 
 #Preview {
-    MapView()
+    BoulderMapView()
 }

@@ -7,29 +7,29 @@
 
 import SwiftUI
 
-struct TabView: View {
+struct BoulderTabView: View {
     var body: some View {
         TabView {
-            Text("Map")
-                .tabItem {
-                    Image(systemName: "house.fill")
-                    Text("Map")
-                }
-            Text("Search")
-                .tabItem {
-                    Image(systemName: "globe")
-                    Text("Search")
-                }
-            Text("Profile")
-                .tabItem {
-                    Image(systemName: "person.fill")
-                    Text("Profile")
-                }
+            Group {
+                BoulderMapView()
+                    .tabItem {
+                        Image(systemName: "shoeprints.fill")
+                        Text("어프로치")
+                    }
+                BoulderSearchView()
+                    .tabItem {
+                        Image(systemName: "sparkle.magnifyingglass")
+                        Text("돌찾기")
+                    }
+            }
+            .toolbarBackground(Color("AppColor").opacity(0.8), for: .tabBar)
+            .toolbarBackground(.visible, for: .tabBar)
+            .toolbarColorScheme(.dark, for: .tabBar)
         }
-        .accentColor(.red)
+        
     }
 }
 
 #Preview {
-    TabView()
+    BoulderTabView()
 }

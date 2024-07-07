@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct BoulderApproachApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            BoulderMapView()
         }
+        .modelContainer(for: Boulder.self)
     }
 }
