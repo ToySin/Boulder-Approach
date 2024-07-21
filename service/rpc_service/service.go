@@ -3,18 +3,22 @@ package rpc_service
 import (
 	"context"
 
+	"github.com/google/uuid"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	pb "github.com/toysin/boulder/service/api"
 )
 
-type boulderApproachServiceServer struct {
+type Service struct {
 	pb.UnimplementedBoulderApproachServiceServer
 }
 
-func New() *boulderApproachServiceServer {
-	return &boulderApproachServiceServer{}
+func New() *Service {
+	return &Service{}
 }
 
-func (s *boulderApproachServiceServer) GetApproach(
+func (s *Service) GetApproach(
 	ctx context.Context,
 	req *pb.GetApproachRequest,
 ) (*pb.GetApproachResponse, error) {
@@ -67,4 +71,55 @@ func (s *boulderApproachServiceServer) GetApproach(
 			},
 		},
 	}, nil
+}
+
+func (s *Service) CreateApproach(
+	ctx context.Context,
+	req *pb.CreateApproachRequest,
+) (*pb.CreateApproachResponse, error) {
+
+	// TODO: Get the boulder data from DB
+	// boulder := dbClient.GetBoulder(req.BoulderId)
+
+	// Build Approach from xml data
+	gpxData, err := ParseGPX(req.GpxXml)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	points := []*pb.Point{}
+	channels := make([]chan []*pb.Point, 1)
+	for _, track := range gpxData.Tracks {
+		for _, segment := range track.Segments {
+			ch := make(chan []*pb.Point)
+			channels = append(channels, ch)
+			go func() {
+				points := []*pb.Point{}
+				for _, point := range segment.Points {
+					p := &pb.Point{
+						Latitude:  point.Latitude,
+						Longitude: point.Longitude,
+					}
+					points = append(points, p)
+				}
+				ch <- points
+			}()
+		}
+	}
+
+	for _, ch := range channels {
+		points = append(points, <-ch...)
+	}
+
+	approach := &pb.Approach{
+		ApproachId:  uuid.New().String(),
+		Name:        req.Name,
+		Description: req.Description,
+		Points:      points,
+	}
+
+	// Save the approach to DB
+	// dbClient.SaveApproach(req.BoulderId, points)
+
+	return &pb.CreateApproachResponse{}, nil
 }

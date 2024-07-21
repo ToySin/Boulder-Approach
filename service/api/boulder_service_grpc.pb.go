@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	BoulderApproachService_GetApproach_FullMethodName  = "/api.BoulderApproachService/GetApproach"
-	BoulderApproachService_GetBoulder_FullMethodName   = "/api.BoulderApproachService/GetBoulder"
-	BoulderApproachService_ListBoulders_FullMethodName = "/api.BoulderApproachService/ListBoulders"
+	BoulderApproachService_GetApproach_FullMethodName    = "/api.BoulderApproachService/GetApproach"
+	BoulderApproachService_GetBoulder_FullMethodName     = "/api.BoulderApproachService/GetBoulder"
+	BoulderApproachService_ListBoulders_FullMethodName   = "/api.BoulderApproachService/ListBoulders"
+	BoulderApproachService_CreateApproach_FullMethodName = "/api.BoulderApproachService/CreateApproach"
 )
 
 // BoulderApproachServiceClient is the client API for BoulderApproachService service.
@@ -31,6 +32,7 @@ type BoulderApproachServiceClient interface {
 	GetApproach(ctx context.Context, in *GetApproachRequest, opts ...grpc.CallOption) (*GetApproachResponse, error)
 	GetBoulder(ctx context.Context, in *GetBoulderRequest, opts ...grpc.CallOption) (*GetBoulderResponse, error)
 	ListBoulders(ctx context.Context, in *ListBouldersRequest, opts ...grpc.CallOption) (*ListBouldersResponse, error)
+	CreateApproach(ctx context.Context, in *CreateApproachRequest, opts ...grpc.CallOption) (*CreateApproachResponse, error)
 }
 
 type boulderApproachServiceClient struct {
@@ -71,6 +73,16 @@ func (c *boulderApproachServiceClient) ListBoulders(ctx context.Context, in *Lis
 	return out, nil
 }
 
+func (c *boulderApproachServiceClient) CreateApproach(ctx context.Context, in *CreateApproachRequest, opts ...grpc.CallOption) (*CreateApproachResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateApproachResponse)
+	err := c.cc.Invoke(ctx, BoulderApproachService_CreateApproach_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BoulderApproachServiceServer is the server API for BoulderApproachService service.
 // All implementations must embed UnimplementedBoulderApproachServiceServer
 // for forward compatibility
@@ -78,6 +90,7 @@ type BoulderApproachServiceServer interface {
 	GetApproach(context.Context, *GetApproachRequest) (*GetApproachResponse, error)
 	GetBoulder(context.Context, *GetBoulderRequest) (*GetBoulderResponse, error)
 	ListBoulders(context.Context, *ListBouldersRequest) (*ListBouldersResponse, error)
+	CreateApproach(context.Context, *CreateApproachRequest) (*CreateApproachResponse, error)
 	mustEmbedUnimplementedBoulderApproachServiceServer()
 }
 
@@ -93,6 +106,9 @@ func (UnimplementedBoulderApproachServiceServer) GetBoulder(context.Context, *Ge
 }
 func (UnimplementedBoulderApproachServiceServer) ListBoulders(context.Context, *ListBouldersRequest) (*ListBouldersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListBoulders not implemented")
+}
+func (UnimplementedBoulderApproachServiceServer) CreateApproach(context.Context, *CreateApproachRequest) (*CreateApproachResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateApproach not implemented")
 }
 func (UnimplementedBoulderApproachServiceServer) mustEmbedUnimplementedBoulderApproachServiceServer() {
 }
@@ -162,6 +178,24 @@ func _BoulderApproachService_ListBoulders_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BoulderApproachService_CreateApproach_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateApproachRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BoulderApproachServiceServer).CreateApproach(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BoulderApproachService_CreateApproach_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BoulderApproachServiceServer).CreateApproach(ctx, req.(*CreateApproachRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BoulderApproachService_ServiceDesc is the grpc.ServiceDesc for BoulderApproachService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -180,6 +214,10 @@ var BoulderApproachService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListBoulders",
 			Handler:    _BoulderApproachService_ListBoulders_Handler,
+		},
+		{
+			MethodName: "CreateApproach",
+			Handler:    _BoulderApproachService_CreateApproach_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

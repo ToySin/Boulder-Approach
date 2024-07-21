@@ -30,6 +30,11 @@ internal protocol APIBoulderApproachServiceClientProtocol: GRPCClient {
     _ request: APIListBouldersRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<APIListBouldersRequest, APIListBouldersResponse>
+
+  func createApproach(
+    _ request: APICreateApproachRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<APICreateApproachRequest, APICreateApproachResponse>
 }
 
 extension APIBoulderApproachServiceClientProtocol {
@@ -88,6 +93,24 @@ extension APIBoulderApproachServiceClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeListBouldersInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to CreateApproach
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to CreateApproach.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func createApproach(
+    _ request: APICreateApproachRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<APICreateApproachRequest, APICreateApproachResponse> {
+    return self.makeUnaryCall(
+      path: APIBoulderApproachServiceClientMetadata.Methods.createApproach.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeCreateApproachInterceptors() ?? []
     )
   }
 }
@@ -168,6 +191,11 @@ internal protocol APIBoulderApproachServiceAsyncClientProtocol: GRPCClient {
     _ request: APIListBouldersRequest,
     callOptions: CallOptions?
   ) -> GRPCAsyncUnaryCall<APIListBouldersRequest, APIListBouldersResponse>
+
+  func makeCreateApproachCall(
+    _ request: APICreateApproachRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<APICreateApproachRequest, APICreateApproachResponse>
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -215,6 +243,18 @@ extension APIBoulderApproachServiceAsyncClientProtocol {
       interceptors: self.interceptors?.makeListBouldersInterceptors() ?? []
     )
   }
+
+  internal func makeCreateApproachCall(
+    _ request: APICreateApproachRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<APICreateApproachRequest, APICreateApproachResponse> {
+    return self.makeAsyncUnaryCall(
+      path: APIBoulderApproachServiceClientMetadata.Methods.createApproach.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeCreateApproachInterceptors() ?? []
+    )
+  }
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -254,6 +294,18 @@ extension APIBoulderApproachServiceAsyncClientProtocol {
       interceptors: self.interceptors?.makeListBouldersInterceptors() ?? []
     )
   }
+
+  internal func createApproach(
+    _ request: APICreateApproachRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> APICreateApproachResponse {
+    return try await self.performAsyncUnaryCall(
+      path: APIBoulderApproachServiceClientMetadata.Methods.createApproach.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeCreateApproachInterceptors() ?? []
+    )
+  }
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -283,6 +335,9 @@ internal protocol APIBoulderApproachServiceClientInterceptorFactoryProtocol: Sen
 
   /// - Returns: Interceptors to use when invoking 'listBoulders'.
   func makeListBouldersInterceptors() -> [ClientInterceptor<APIListBouldersRequest, APIListBouldersResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'createApproach'.
+  func makeCreateApproachInterceptors() -> [ClientInterceptor<APICreateApproachRequest, APICreateApproachResponse>]
 }
 
 internal enum APIBoulderApproachServiceClientMetadata {
@@ -293,6 +348,7 @@ internal enum APIBoulderApproachServiceClientMetadata {
       APIBoulderApproachServiceClientMetadata.Methods.getApproach,
       APIBoulderApproachServiceClientMetadata.Methods.getBoulder,
       APIBoulderApproachServiceClientMetadata.Methods.listBoulders,
+      APIBoulderApproachServiceClientMetadata.Methods.createApproach,
     ]
   )
 
@@ -314,6 +370,12 @@ internal enum APIBoulderApproachServiceClientMetadata {
       path: "/api.BoulderApproachService/ListBoulders",
       type: GRPCCallType.unary
     )
+
+    internal static let createApproach = GRPCMethodDescriptor(
+      name: "CreateApproach",
+      path: "/api.BoulderApproachService/CreateApproach",
+      type: GRPCCallType.unary
+    )
   }
 }
 
@@ -326,6 +388,8 @@ internal protocol APIBoulderApproachServiceProvider: CallHandlerProvider {
   func getBoulder(request: APIGetBoulderRequest, context: StatusOnlyCallContext) -> EventLoopFuture<APIGetBoulderResponse>
 
   func listBoulders(request: APIListBouldersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<APIListBouldersResponse>
+
+  func createApproach(request: APICreateApproachRequest, context: StatusOnlyCallContext) -> EventLoopFuture<APICreateApproachResponse>
 }
 
 extension APIBoulderApproachServiceProvider {
@@ -367,6 +431,15 @@ extension APIBoulderApproachServiceProvider {
         userFunction: self.listBoulders(request:context:)
       )
 
+    case "CreateApproach":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<APICreateApproachRequest>(),
+        responseSerializer: ProtobufSerializer<APICreateApproachResponse>(),
+        interceptors: self.interceptors?.makeCreateApproachInterceptors() ?? [],
+        userFunction: self.createApproach(request:context:)
+      )
+
     default:
       return nil
     }
@@ -393,6 +466,11 @@ internal protocol APIBoulderApproachServiceAsyncProvider: CallHandlerProvider, S
     request: APIListBouldersRequest,
     context: GRPCAsyncServerCallContext
   ) async throws -> APIListBouldersResponse
+
+  func createApproach(
+    request: APICreateApproachRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> APICreateApproachResponse
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -441,6 +519,15 @@ extension APIBoulderApproachServiceAsyncProvider {
         wrapping: { try await self.listBoulders(request: $0, context: $1) }
       )
 
+    case "CreateApproach":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<APICreateApproachRequest>(),
+        responseSerializer: ProtobufSerializer<APICreateApproachResponse>(),
+        interceptors: self.interceptors?.makeCreateApproachInterceptors() ?? [],
+        wrapping: { try await self.createApproach(request: $0, context: $1) }
+      )
+
     default:
       return nil
     }
@@ -460,6 +547,10 @@ internal protocol APIBoulderApproachServiceServerInterceptorFactoryProtocol: Sen
   /// - Returns: Interceptors to use when handling 'listBoulders'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeListBouldersInterceptors() -> [ServerInterceptor<APIListBouldersRequest, APIListBouldersResponse>]
+
+  /// - Returns: Interceptors to use when handling 'createApproach'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeCreateApproachInterceptors() -> [ServerInterceptor<APICreateApproachRequest, APICreateApproachResponse>]
 }
 
 internal enum APIBoulderApproachServiceServerMetadata {
@@ -470,6 +561,7 @@ internal enum APIBoulderApproachServiceServerMetadata {
       APIBoulderApproachServiceServerMetadata.Methods.getApproach,
       APIBoulderApproachServiceServerMetadata.Methods.getBoulder,
       APIBoulderApproachServiceServerMetadata.Methods.listBoulders,
+      APIBoulderApproachServiceServerMetadata.Methods.createApproach,
     ]
   )
 
@@ -489,6 +581,12 @@ internal enum APIBoulderApproachServiceServerMetadata {
     internal static let listBoulders = GRPCMethodDescriptor(
       name: "ListBoulders",
       path: "/api.BoulderApproachService/ListBoulders",
+      type: GRPCCallType.unary
+    )
+
+    internal static let createApproach = GRPCMethodDescriptor(
+      name: "CreateApproach",
+      path: "/api.BoulderApproachService/CreateApproach",
       type: GRPCCallType.unary
     )
   }

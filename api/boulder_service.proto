@@ -11,6 +11,8 @@ service BoulderApproachService {
   rpc GetApproach(GetApproachRequest) returns (GetApproachResponse);
   rpc GetBoulder(GetBoulderRequest) returns (GetBoulderResponse);
   rpc ListBoulders(ListBouldersRequest) returns (ListBouldersResponse);
+
+  rpc CreateApproach(CreateApproachRequest) returns (CreateApproachResponse);
 }
 
 message GetApproachRequest {
@@ -35,4 +37,14 @@ message ListBouldersRequest {
 
 message ListBouldersResponse {
   repeated Boulder boulders = 1;
+}
+
+message CreateApproachRequest {
+  string boulder_id = 1;
+  string name = 2;
+  string description = 3;
+  bytes gpx_xml = 4;
+}
+
+message CreateApproachResponse {
 }
