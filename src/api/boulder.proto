@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package api;
 
-option go_package = "../service/api";
+option go_package = ".";
 option swift_prefix = "API";
 
 message Point {
@@ -12,14 +12,14 @@ message Point {
 }
 
 message Approach {
-  string approach_id = 1;
+  string id = 1;
   string name = 2;
   string description = 3;
   repeated Point points = 4;
 }
 
 message Boulder {
-  string boulder_id = 1;
+  string id = 1;
   string name = 2;
   repeated Approach approaches = 3;
 }

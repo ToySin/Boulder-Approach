@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package api;
+
+import "boulder.proto";
+
+option go_package = ".";
+option swift_prefix = "API";
+
+service BoulderApproachService {
+  rpc GetBoulder(GetBoulderRequest) returns (GetBoulderResponse);
+  rpc ListBoulders(ListBouldersRequest) returns (ListBouldersResponse);
+
+  //
+  // Manager
+  //
+  rpc UpsertBoulder(UpsertBoulderRequest) returns (UpsertBoulderResponse);
+  rpc UpsertApproach(UpsertApproachRequest) returns (UpsertApproachResponse);
+}
+
+message GetBoulderRequest {
+  string boulder_id = 1;
+}
+
+message GetBoulderResponse {
+  Boulder boulder = 1;
+}
+
+message ListBouldersRequest {
+  string search_key = 1;
+}
+
+message ListBouldersResponse {
+  repeated Boulder boulders = 1;
+}
+
+//
+// Manager
+//
+message UpsertBoulderRequest {
+  Boulder boulder = 1;
+}
+
+message UpsertBoulderResponse {}
+
+message UpsertApproachRequest {
+  Approach approach = 1;
+  bytes gpx_xml = 2;
+}
+
+message UpsertApproachResponse {}

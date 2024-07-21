@@ -1,4 +1,4 @@
-package rpc_service
+package service
 
 import (
 	"encoding/xml"

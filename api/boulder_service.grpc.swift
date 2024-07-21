@@ -31,6 +31,11 @@ internal protocol APIBoulderApproachServiceClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<APIListBouldersRequest, APIListBouldersResponse>
 
+  func createBoulder(
+    _ request: APICreateBoulderRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<APICreateBoulderRequest, APICreateBoulderResponse>
+
   func createApproach(
     _ request: APICreateApproachRequest,
     callOptions: CallOptions?
@@ -93,6 +98,24 @@ extension APIBoulderApproachServiceClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeListBouldersInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to CreateBoulder
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to CreateBoulder.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func createBoulder(
+    _ request: APICreateBoulderRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<APICreateBoulderRequest, APICreateBoulderResponse> {
+    return self.makeUnaryCall(
+      path: APIBoulderApproachServiceClientMetadata.Methods.createBoulder.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeCreateBoulderInterceptors() ?? []
     )
   }
 
@@ -192,6 +215,11 @@ internal protocol APIBoulderApproachServiceAsyncClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> GRPCAsyncUnaryCall<APIListBouldersRequest, APIListBouldersResponse>
 
+  func makeCreateBoulderCall(
+    _ request: APICreateBoulderRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<APICreateBoulderRequest, APICreateBoulderResponse>
+
   func makeCreateApproachCall(
     _ request: APICreateApproachRequest,
     callOptions: CallOptions?
@@ -241,6 +269,18 @@ extension APIBoulderApproachServiceAsyncClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeListBouldersInterceptors() ?? []
+    )
+  }
+
+  internal func makeCreateBoulderCall(
+    _ request: APICreateBoulderRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<APICreateBoulderRequest, APICreateBoulderResponse> {
+    return self.makeAsyncUnaryCall(
+      path: APIBoulderApproachServiceClientMetadata.Methods.createBoulder.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeCreateBoulderInterceptors() ?? []
     )
   }
 
@@ -295,6 +335,18 @@ extension APIBoulderApproachServiceAsyncClientProtocol {
     )
   }
 
+  internal func createBoulder(
+    _ request: APICreateBoulderRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> APICreateBoulderResponse {
+    return try await self.performAsyncUnaryCall(
+      path: APIBoulderApproachServiceClientMetadata.Methods.createBoulder.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeCreateBoulderInterceptors() ?? []
+    )
+  }
+
   internal func createApproach(
     _ request: APICreateApproachRequest,
     callOptions: CallOptions? = nil
@@ -336,6 +388,9 @@ internal protocol APIBoulderApproachServiceClientInterceptorFactoryProtocol: Sen
   /// - Returns: Interceptors to use when invoking 'listBoulders'.
   func makeListBouldersInterceptors() -> [ClientInterceptor<APIListBouldersRequest, APIListBouldersResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'createBoulder'.
+  func makeCreateBoulderInterceptors() -> [ClientInterceptor<APICreateBoulderRequest, APICreateBoulderResponse>]
+
   /// - Returns: Interceptors to use when invoking 'createApproach'.
   func makeCreateApproachInterceptors() -> [ClientInterceptor<APICreateApproachRequest, APICreateApproachResponse>]
 }
@@ -348,6 +403,7 @@ internal enum APIBoulderApproachServiceClientMetadata {
       APIBoulderApproachServiceClientMetadata.Methods.getApproach,
       APIBoulderApproachServiceClientMetadata.Methods.getBoulder,
       APIBoulderApproachServiceClientMetadata.Methods.listBoulders,
+      APIBoulderApproachServiceClientMetadata.Methods.createBoulder,
       APIBoulderApproachServiceClientMetadata.Methods.createApproach,
     ]
   )
@@ -371,6 +427,12 @@ internal enum APIBoulderApproachServiceClientMetadata {
       type: GRPCCallType.unary
     )
 
+    internal static let createBoulder = GRPCMethodDescriptor(
+      name: "CreateBoulder",
+      path: "/api.BoulderApproachService/CreateBoulder",
+      type: GRPCCallType.unary
+    )
+
     internal static let createApproach = GRPCMethodDescriptor(
       name: "CreateApproach",
       path: "/api.BoulderApproachService/CreateApproach",
@@ -388,6 +450,8 @@ internal protocol APIBoulderApproachServiceProvider: CallHandlerProvider {
   func getBoulder(request: APIGetBoulderRequest, context: StatusOnlyCallContext) -> EventLoopFuture<APIGetBoulderResponse>
 
   func listBoulders(request: APIListBouldersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<APIListBouldersResponse>
+
+  func createBoulder(request: APICreateBoulderRequest, context: StatusOnlyCallContext) -> EventLoopFuture<APICreateBoulderResponse>
 
   func createApproach(request: APICreateApproachRequest, context: StatusOnlyCallContext) -> EventLoopFuture<APICreateApproachResponse>
 }
@@ -431,6 +495,15 @@ extension APIBoulderApproachServiceProvider {
         userFunction: self.listBoulders(request:context:)
       )
 
+    case "CreateBoulder":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<APICreateBoulderRequest>(),
+        responseSerializer: ProtobufSerializer<APICreateBoulderResponse>(),
+        interceptors: self.interceptors?.makeCreateBoulderInterceptors() ?? [],
+        userFunction: self.createBoulder(request:context:)
+      )
+
     case "CreateApproach":
       return UnaryServerHandler(
         context: context,
@@ -466,6 +539,11 @@ internal protocol APIBoulderApproachServiceAsyncProvider: CallHandlerProvider, S
     request: APIListBouldersRequest,
     context: GRPCAsyncServerCallContext
   ) async throws -> APIListBouldersResponse
+
+  func createBoulder(
+    request: APICreateBoulderRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> APICreateBoulderResponse
 
   func createApproach(
     request: APICreateApproachRequest,
@@ -519,6 +597,15 @@ extension APIBoulderApproachServiceAsyncProvider {
         wrapping: { try await self.listBoulders(request: $0, context: $1) }
       )
 
+    case "CreateBoulder":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<APICreateBoulderRequest>(),
+        responseSerializer: ProtobufSerializer<APICreateBoulderResponse>(),
+        interceptors: self.interceptors?.makeCreateBoulderInterceptors() ?? [],
+        wrapping: { try await self.createBoulder(request: $0, context: $1) }
+      )
+
     case "CreateApproach":
       return GRPCAsyncServerHandler(
         context: context,
@@ -548,6 +635,10 @@ internal protocol APIBoulderApproachServiceServerInterceptorFactoryProtocol: Sen
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeListBouldersInterceptors() -> [ServerInterceptor<APIListBouldersRequest, APIListBouldersResponse>]
 
+  /// - Returns: Interceptors to use when handling 'createBoulder'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeCreateBoulderInterceptors() -> [ServerInterceptor<APICreateBoulderRequest, APICreateBoulderResponse>]
+
   /// - Returns: Interceptors to use when handling 'createApproach'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeCreateApproachInterceptors() -> [ServerInterceptor<APICreateApproachRequest, APICreateApproachResponse>]
@@ -561,6 +652,7 @@ internal enum APIBoulderApproachServiceServerMetadata {
       APIBoulderApproachServiceServerMetadata.Methods.getApproach,
       APIBoulderApproachServiceServerMetadata.Methods.getBoulder,
       APIBoulderApproachServiceServerMetadata.Methods.listBoulders,
+      APIBoulderApproachServiceServerMetadata.Methods.createBoulder,
       APIBoulderApproachServiceServerMetadata.Methods.createApproach,
     ]
   )
@@ -581,6 +673,12 @@ internal enum APIBoulderApproachServiceServerMetadata {
     internal static let listBoulders = GRPCMethodDescriptor(
       name: "ListBoulders",
       path: "/api.BoulderApproachService/ListBoulders",
+      type: GRPCCallType.unary
+    )
+
+    internal static let createBoulder = GRPCMethodDescriptor(
+      name: "CreateBoulder",
+      path: "/api.BoulderApproachService/CreateBoulder",
       type: GRPCCallType.unary
     )
 
